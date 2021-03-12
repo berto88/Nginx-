@@ -1,3 +1,9 @@
+//Servidor de mi portfolio:
+//tenemos el listen con el puerto por el que escucha
+//el server name son las url de entrada
+//el root es lo que mostrara, esa es la ruta donde se encuentra mi portfolio
+//el include que le indica que ssl(seguridad)recoge 
+#SERVER1
 server {
         listen 443 ssl http2;
         listen       [::]:443;
@@ -15,13 +21,15 @@ server {
 	add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload ";
     }
 
-server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        server_name _;
-        return 301 https://$host$request_uri;
-}
+//Servidor para redireccionar de mi app .net en windows
+//tenemos el listen con el puerto por el que escucha
+//el server name son las url de entrada
+//el root es lo que mostrara, esa es la ruta donde se encuentra mi portfolio
+//el include que le indica que ssl(seguridad)recoge 
+//el location maneja los errores en las paginas y la redireccion con el proxypass del http al https
+//el add_header es para que no se pueda entrar por http
 
+#SERVER2
 server {
         listen       443 ssl http2;
         listen       [::]:443;
@@ -38,39 +46,3 @@ server {
                 proxy_pass http://3.140.93.65:80;
         }
 	add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload ";       }
-
-server {
-        listen       443 ssl http2;
-        listen       [::]:443;
-        server_name  www.tienda.portfolio-alberto.es tienda.portfolio-alberto.es;
-        include /etc/nginx/ssl/*.conf;
-        #index index.php  index.html index.htm;
-        error_page 404 /error404/index.html;
-        location = /error404/index.html {
-        }
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-        }
-	location / {
-		proxy_pass http://127.0.0.1:8080;
-	}
-    }
-
-server {
-        listen       443 ssl http2;
-        listen       [::]:443;
-        server_name  www.node.portfolio-alberto.es node.portfolio-alberto.es;
-        #return 301 https://tienda.portfolio-alberto.es$request_uri;
-        #root         /var/www/html/wordpress;
-        include /etc/nginx/ssl/*.conf;
-        #index index.php  index.html index.htm;
-        error_page 404 /error404/index.html;
-        location = /error404/index.html {
-        }
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-        }
-        location / {
-               proxy_pass http://127.0.0.1:5000;
-        }
-    }
